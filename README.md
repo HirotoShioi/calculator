@@ -36,7 +36,7 @@ math --path expr.txt
 
 "5 + 5"という式があれば、それを`ADD (NUM 5) (NUM 5)`と解析できる
 
-###　Evaluate
+### Evaluate
 
 解析された式を実行し、答えを算出する。
 
