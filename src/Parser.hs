@@ -17,7 +17,7 @@ data Token
     | Exponent
     | OpenBracket
     | ClosingBracket
-    deriving (Show, Read, Eq)
+    deriving (Show, Read, Eq, Ord)
 
 parseExpression :: String -> Either ParseError [Token]
 parseExpression input = runParser (exprParser >> getState) mempty "Expression parser" input
