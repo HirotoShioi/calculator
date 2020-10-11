@@ -4,7 +4,7 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: c01019e3aef30659b5c557d31f5443fadc5fcd1c51e4926a29ba7c2caa0c0a7d
+-- hash: dafab84516dd08849def1c93f065045d6ae449ec13b93fbf806d7930dbabd51d
 
 name:           arithimetic
 version:        0.1.0.0
@@ -28,8 +28,9 @@ source-repository head
 library
   exposed-modules:
       CLI
-      Evaluate
       Parser
+      RPN
+      ShuntingYard
   other-modules:
       Paths_arithimetic
   hs-source-dirs:
@@ -38,6 +39,7 @@ library
   build-depends:
       QuickCheck
     , base >=4.7 && <5
+    , containers
     , hspec
     , mtl
     , parsec
@@ -54,6 +56,7 @@ executable arithimetic-exe
       QuickCheck
     , arithimetic
     , base >=4.7 && <5
+    , containers
     , hspec
     , mtl
     , parsec
@@ -71,6 +74,7 @@ test-suite arithimetic-test
       QuickCheck
     , arithimetic
     , base >=4.7 && <5
+    , containers
     , hspec
     , mtl
     , parsec

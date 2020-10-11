@@ -1,9 +1,9 @@
 {-# LANGUAGE LambdaCase #-}
 
-module Evaluate where
+module RPN where
 
-import Control.Monad.State
-import Control.Monad.Except
+import           Control.Monad.Except
+import           Control.Monad.State
 
 -- 逆ポーランド記法を用いて計算式を解く
 
@@ -13,7 +13,7 @@ data Token
     | SUBTRACT
     | MULTIPLY
     | DIVIDE
-    | EXPONENTIAL
+    | EXPONENT
     deriving (Show, Read)
 
 type Stack = [Token]
@@ -50,7 +50,7 @@ run tokens = do
        ADD -> compute (+)
        SUBTRACT -> compute (-)
        MULTIPLY -> compute (*)
-       EXPONENTIAL -> do
+       EXPONENT -> do
            e <- getFirstVal
            if e < 0
                then throwError $ NegativeExponent e
@@ -72,7 +72,7 @@ run tokens = do
 
 getFirstVal :: Evaluator Int
 getFirstVal = do
-    stack <- get 
+    stack <- get
     if null stack
         then throwError EmptyStack
         else return $ head stack

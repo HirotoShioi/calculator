@@ -25,6 +25,7 @@ dependencies:
 - mtl
 - QuickCheck
 - hspec
+- containers
 
 ghc-options:
   - -Werror
