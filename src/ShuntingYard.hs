@@ -23,11 +23,9 @@ data ShuntingError
     | StackEmpty
     | BracketLeftOnStack
     | PushingBracketToQueue P.Token
-    deriving Show
+    deriving (Eq, Read, Show, Ord)
 
 type Evaluator a = StateT EvalStack (Except ShuntingError) a
-
--- data Operator = Add | Subtract | Multiply | Divide | Exponent | OpenBracket | ClosingBracket deriving Show
 
 initState :: EvalStack
 initState = EvalStack mempty mempty

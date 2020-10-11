@@ -2,8 +2,8 @@
 
 module RPN where
 
-import           Control.Monad.Except
-import           Control.Monad.State
+import           Control.Monad.Except (Except, runExcept, throwError)
+import           Control.Monad.State  (StateT, evalStateT, get, modify')
 
 -- 逆ポーランド記法を用いて計算式を解く
 
@@ -14,7 +14,7 @@ data Token
     | MULTIPLY
     | DIVIDE
     | EXPONENT
-    deriving (Show, Read)
+    deriving (Show, Read, Eq, Ord)
 
 type Stack = [Token]
 
@@ -27,7 +27,7 @@ data EvaluationError
     deriving (Show)
 
 test1 :: Stack
-test1 = [NUM 5, NUM 7, ADD, NUM 2, DIVIDE, NUM 2]
+test1 = [NUM 5, NUM 7, ADD, NUM 2, DIVIDE]
 
 type Evaluator a = StateT [Int] (Except EvaluationError) a
 
