@@ -17,6 +17,7 @@ main = hspec $
     describe "Calculator" $ do
         expressionParserSpec
         shuntingYardSpec
+        rpnSpec
 
 expressionParserSpec :: Spec
 expressionParserSpec = do
@@ -65,7 +66,34 @@ shuntingYardSpec = describe "ShuntingYard" $ do
         (intoRPN [P.Num 4, P.Plus, P.Num 10, P.ClosingBracket])
         `shouldBe`
         (Left InvalidBracket)
-    it "Will not throw error on invalid expression  4 *+ 4" $
+    it "Will not throw error on invalid expression  `4 *+ 4`" $
         (intoRPN [P.Num 4, P.Multiply, P.Plus, P.Num 4])
         `shouldBe`
         (Right [RPN.NUM 4,RPN.MULTIPLY,RPN.NUM 4,RPN.ADD])
+
+rpnSpec :: Spec
+rpnSpec = describe "RPN algorithm" $ do
+    it "Can evaluate valid math expression `4 10 +`" $
+        (RPN.evaluate [RPN.NUM 4, RPN.NUM 10, RPN.ADD])
+        `shouldBe`
+        (Right 14)
+    it "Can evaluate valid complex math expression `4 10 * 5 + 9 /`" $
+        (RPN.evaluate [RPN.NUM 4, RPN.NUM 10, RPN.MULTIPLY, RPN.NUM 5, RPN.ADD, RPN.NUM 9, RPN.DIVIDE])
+        `shouldBe`
+        (Right 5)
+    it "Can throw error on invalid expression `4 10 + *`" $
+        (RPN.evaluate [RPN.NUM 4, RPN.NUM 10, RPN.ADD, RPN.MULTIPLY])
+        `shouldBe`
+        (Left $ RPN.SecondNumMissing [14])
+    it "Can throw error on invalid expression `4 10 + 14`" $
+        (RPN.evaluate [RPN.NUM 4, RPN.NUM 10, RPN.ADD, RPN.NUM 12])
+        `shouldBe`
+        (Left $ RPN.TooManyOnStack [12, 14])
+    it "Can throw error on invalid expression `* 4`" $
+        (RPN.evaluate [RPN.MULTIPLY, RPN.NUM 4])
+        `shouldBe`
+        (Left RPN.EmptyStack)
+    it "Can throw error on divided by zero" $
+        (RPN.evaluate [RPN.NUM 4, RPN.NUM 0, RPN.DIVIDE])
+        `shouldBe`
+        (Left RPN.DivideByZero)
