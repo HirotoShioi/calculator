@@ -1,6 +1,6 @@
-# arithimetic
+# Calculator
 
-四則演算を行う実行可能プログラム
+Haskellで電卓を実装してみた
 
 ## 実行方法
 
