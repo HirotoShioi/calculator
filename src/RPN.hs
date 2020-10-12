@@ -24,7 +24,7 @@ data EvaluationError
     | EmptyStack -- ^ スタックが空
     | SecondNumMissing [Int] -- ^ 2つ目の数字がない
     | TooManyOnStack [Int] -- ^ 計算結果を求めた際にスタックに2つ以上の値が存在した
-    deriving (Show)
+    deriving (Eq, Show, Read)
 
 test1 :: Stack
 test1 = [NUM 5, NUM 7, ADD, NUM 2, DIVIDE]
