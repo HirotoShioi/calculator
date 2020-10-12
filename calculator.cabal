@@ -4,13 +4,13 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: dafab84516dd08849def1c93f065045d6ae449ec13b93fbf806d7930dbabd51d
+-- hash: ee715cebd35942e9dff28bd7791a38fd5eab2ed5cd3cbe5c205ce091eb360ff5
 
-name:           arithimetic
+name:           calculator
 version:        0.1.0.0
-description:    Please see the README on GitHub at <https://github.com/githubuser/arithimetic#readme>
-homepage:       https://github.com/githubuser/arithimetic#readme
-bug-reports:    https://github.com/githubuser/arithimetic/issues
+description:    Please see the README on GitHub at <https://github.com/githubuser/calculator#readme>
+homepage:       https://github.com/HirotoShioi/calculator#readme
+bug-reports:    https://github.com/HirotoShioi/calculator/issues
 author:         Author name here
 maintainer:     example@example.com
 copyright:      2020 Author name here
@@ -23,7 +23,7 @@ extra-source-files:
 
 source-repository head
   type: git
-  location: https://github.com/githubuser/arithimetic
+  location: https://github.com/HirotoShioi/calculator
 
 library
   exposed-modules:
@@ -32,7 +32,7 @@ library
       RPN
       ShuntingYard
   other-modules:
-      Paths_arithimetic
+      Paths_calculator
   hs-source-dirs:
       src
   ghc-options: -Werror -Wall
@@ -45,35 +45,35 @@ library
     , parsec
   default-language: Haskell2010
 
-executable arithimetic-exe
+executable calculator-exe
   main-is: Main.hs
   other-modules:
-      Paths_arithimetic
+      Paths_calculator
   hs-source-dirs:
       app
   ghc-options: -Werror -threaded -rtsopts -with-rtsopts=-N
   build-depends:
       QuickCheck
-    , arithimetic
     , base >=4.7 && <5
+    , calculator
     , containers
     , hspec
     , mtl
     , parsec
   default-language: Haskell2010
 
-test-suite arithimetic-test
+test-suite calculator-test
   type: exitcode-stdio-1.0
   main-is: Spec.hs
   other-modules:
-      Paths_arithimetic
+      Paths_calculator
   hs-source-dirs:
       test
   ghc-options: -Werror -threaded -rtsopts -with-rtsopts=-N
   build-depends:
       QuickCheck
-    , arithimetic
     , base >=4.7 && <5
+    , calculator
     , containers
     , hspec
     , mtl
