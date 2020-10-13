@@ -1,3 +1,5 @@
+{-# LANGUAGE LambdaCase #-}
+
 module Parser
     ( Token(..)
     , parseString
@@ -5,7 +7,7 @@ module Parser
 
 import           Text.Parsec (ParseError, Parsec, anyChar, choice, digit,
                               getState, many1, modifyState, oneOf, optionMaybe,
-                              parserFail, runParser, spaces, (<?>), (<|>))
+                              parserFail, runParser, spaces, (<?>), (<|>), char, try)
 import           Text.Read   (readMaybe)
 
 -- 式5 + 6 * (7 + 8) を [Num 5, Num 6, Multiply, OpenBracket, Num 7, Plus, Num 8, ClosingBracket]
@@ -42,7 +44,7 @@ exprParser = do
 
 parseToken :: Parsec String [Token] Token
 parseToken = do
-    str <- spaces *>  choice [many1 digit <|> (pure <$> operator)] <* spaces
+    str <- spaces *>  choice [try parseNegativeNumber <|> many1 digit <|> (pure <$> operator)] <* spaces
     case readMaybe str of
         Just n -> return $ Num n
         Nothing -> case str of
@@ -58,4 +60,23 @@ parseToken = do
 operator :: Parsec String state Char
 operator = oneOf "+-*/^()" <?> "operator"
 
+-- [Token]のlastが数字ならなにもしない、もし演算子ならパースする
+parseNegativeNumber :: Parsec String [Token] String
+parseNegativeNumber = do
+    ls <- getState
+    if null ls
+        then parseNegative
+        else if isOperator (last ls)
+            then parseNegative
+            else parserFail "Probably operator, move on"
+  where
+    parseNegative :: Parsec String [Token] String
+    parseNegative = do
+        minus <- char '-'
+        num <- many1 digit
+        return $ minus : num
+    isOperator :: Token -> Bool
+    isOperator = \case
+        Num _ -> False
+        _ -> True
 
