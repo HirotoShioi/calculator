@@ -41,13 +41,16 @@ instance Arbitrary ExpressionStringGenerator where
         where
         -- Only positive numbers
         genPositiveNumStr :: Gen String
-        genPositiveNumStr = show <$> (choose (1, 100) :: Gen Int)
+        genPositiveNumStr = show <$> (arbitrary :: Gen Int)
         genOperator :: Gen String
         genOperator = return <$> elements "+-/*^()"
 
 strip :: String -> String
 strip = dropWhile isSpace . dropWhileEnd isSpace
 
+
+-- 性質テストを実装することもできるが、かなりややこしくなるので後回し
+-- | 操車場アルゴリズムをテストする
 shuntingYardSpec :: Spec
 shuntingYardSpec = describe "ShuntingYard" $ do
     it "Can convert simple expression `4 + 4` into RPN" $
@@ -71,6 +74,8 @@ shuntingYardSpec = describe "ShuntingYard" $ do
         `shouldBe`
         (Right [RPN.NUM 4,RPN.MULTIPLY,RPN.NUM 4,RPN.ADD])
 
+-- 性質テストを実装することもできるが、かなりややこしくなるので後回し
+-- | 逆ポーランド記法をテストする
 rpnSpec :: Spec
 rpnSpec = describe "RPN algorithm" $ do
     it "Can evaluate valid math expression `4 10 +`" $
