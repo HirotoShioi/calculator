@@ -8,6 +8,7 @@ import           Test.Hspec.QuickCheck (prop)
 import           Test.QuickCheck       (Arbitrary (..), Gen, choose, elements,
                                         oneof, (===))
 
+import           Calculator            (calculate)
 import qualified Parser                as P
 import qualified RPN                   as RPN
 import           ShuntingYard          (ShuntingYardError (..), intoRPN)
@@ -18,6 +19,7 @@ main = hspec $
         expressionParserSpec
         shuntingYardSpec
         rpnSpec
+        calculatorSpec
 
 expressionParserSpec :: Spec
 expressionParserSpec = do
@@ -104,3 +106,14 @@ rpnSpec = describe "RPN algorithm" $ do
         (RPN.evaluate [RPN.NUM 4, RPN.NUM 0, RPN.DIVIDE])
         `shouldBe`
         (Left RPN.DivideByZero)
+
+calculatorSpec :: Spec
+calculatorSpec = describe "calculator" $ do
+    it "Can calculate simple math expression 4 + 4" $
+        (calculate "4 + 4") `shouldBe` (Right 8)
+    it "Can calculate complex math expression 4 ^ 2 - 2 * (1 + 2)" $
+        (calculate "4 ^ 2 - 2 * (1 + 2)") `shouldBe` (Right 10)
+    it "Can throw error on invalid expression 4 + 4)" $
+        (calculate "4 + 4)") `shouldBe` (Left "Invalid use of bracket")
+    it "Can throw error on invalid expression 4a + 2" $
+        (calculate "4a + 2") `shouldBe` (Left "Unepxected character: a")
