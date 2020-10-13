@@ -1,6 +1,12 @@
 {-# LANGUAGE LambdaCase #-}
 
-module RPN where
+module RPN
+    ( Token(..)
+    , evaluate
+    , EvaluationError(..)
+    , renderRPNError
+    )
+    where
 
 import           Control.Monad.Except (Except, runExcept, throwError)
 import           Control.Monad.State  (StateT, evalStateT, get, modify')
@@ -16,8 +22,6 @@ data Token
     | EXPONENT
     deriving (Show, Read, Eq, Ord)
 
-type Stack = [Token]
-
 data EvaluationError
     = DivideByZero -- ^ 0 で割ろうとした
     | NegativeExponent Int -- ^ 負の数で累乗した
@@ -26,8 +30,13 @@ data EvaluationError
     | TooManyOnStack [Int] -- ^ 計算結果を求めた際にスタックに2つ以上の値が存在した
     deriving (Eq, Show, Read)
 
-test1 :: Stack
-test1 = [NUM 5, NUM 7, ADD, NUM 2, DIVIDE]
+renderRPNError :: RPN.EvaluationError -> String
+renderRPNError = \case
+    DivideByZero -> "Divided by zero"
+    NegativeExponent n -> "Power is negative: " <> show n
+    EmptyStack -> "Stack is empty"
+    SecondNumMissing ls -> "Second number could not be obtained: " <> show ls
+    TooManyOnStack ls -> "More than two number on stack: " <> show ls
 
 type Evaluator a = StateT [Int] (Except EvaluationError) a
 
