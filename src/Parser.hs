@@ -1,4 +1,7 @@
-module Parser where
+module Parser
+    ( Token(..)
+    , parseString
+    ) where
 
 import           Text.Parsec (ParseError, Parsec, anyChar, choice, digit,
                               getState, many1, modifyState, oneOf, optionMaybe,
@@ -19,8 +22,8 @@ data Token
     | ClosingBracket
     deriving (Show, Read, Eq, Ord)
 
-parseExpression :: String -> Either ParseError [Token]
-parseExpression input = runParser (exprParser >> getState) mempty "Expression parser" input
+parseString :: String -> Either ParseError [Token]
+parseString input = runParser (exprParser >> getState) mempty "Expression parser" input
 
 -- 14 + 4
 exprParser :: Parsec String [Token] ()

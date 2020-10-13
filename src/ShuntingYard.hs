@@ -2,7 +2,8 @@
 
 module ShuntingYard
     ( intoRPN
-    , ShuntingError(..)
+    , ShuntingYardError(..)
+    , renderShuntingYardError
     ) where
 
 import           Control.Monad.Except (Except, runExcept, throwError)
@@ -12,12 +13,14 @@ import           Data.Maybe           (fromJust)
 import qualified Parser               as P
 import qualified RPN                  as RPN
 
+-- 操車場アルゴリズムを用いて解析された式を逆ポーランド記法へ変換するモジュール
+
 data EvalStack =  EvalStack {
       stack :: ![P.Token]
     , queue :: ![RPN.Token]
     } deriving Show
 
-data ShuntingError
+data ShuntingYardError
     = InvalidBracket
     | UnexpectedToken P.Token
     | StackEmpty
@@ -25,12 +28,20 @@ data ShuntingError
     | PushingBracketToQueue P.Token
     deriving (Eq, Read, Show, Ord)
 
-type Evaluator a = StateT EvalStack (Except ShuntingError) a
+renderShuntingYardError :: ShuntingYardError -> String
+renderShuntingYardError = \case
+    InvalidBracket -> "Invalid use of bracket"
+    UnexpectedToken t -> "Unexpected token: " <> show t
+    StackEmpty -> "Expecting an operator, but the stack is empty"
+    BracketLeftOnStack -> "Open bracket remains on stack"
+    PushingBracketToQueue _t -> "Attempting to push open bracket to queue"
+
+type Evaluator a = StateT EvalStack (Except ShuntingYardError) a
 
 initState :: EvalStack
 initState = EvalStack mempty mempty
 
-intoRPN :: [P.Token] -> Either ShuntingError [RPN.Token]
+intoRPN :: [P.Token] -> Either ShuntingYardError [RPN.Token]
 intoRPN tokens = queue <$> (runExcept . flip execStateT initState . run) tokens
 
 run :: [P.Token] -> Evaluator ()

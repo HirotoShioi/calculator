@@ -10,7 +10,7 @@ import           Test.QuickCheck       (Arbitrary (..), Gen, choose, elements,
 
 import qualified Parser                as P
 import qualified RPN                   as RPN
-import           ShuntingYard          (ShuntingError (..), intoRPN)
+import           ShuntingYard          (ShuntingYardError (..), intoRPN)
 
 main :: IO ()
 main = hspec $
@@ -24,10 +24,10 @@ expressionParserSpec = do
     describe "Expression parser" $ do
         prop "It can parse arbitrary expression"
             (\(ExpressionStringGenerator expr _) ->
-                isRight $ P.parseExpression expr)
+                isRight $ P.parseString expr)
         prop "The length of the token should be valid"
             (\(ExpressionStringGenerator expr num) ->
-                fmap length (P.parseExpression expr) === Right num)
+                fmap length (P.parseString expr) === Right num)
 
 data ExpressionStringGenerator = ExpressionStringGenerator String Int
   deriving Show

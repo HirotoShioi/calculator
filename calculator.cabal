@@ -4,7 +4,7 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: ee715cebd35942e9dff28bd7791a38fd5eab2ed5cd3cbe5c205ce091eb360ff5
+-- hash: 1dd563e2520de9dbbb56ac6ae8048b5221273235b5b5cdf598643957af5cb8f9
 
 name:           calculator
 version:        0.1.0.0
@@ -27,6 +27,7 @@ source-repository head
 
 library
   exposed-modules:
+      Calculator
       CLI
       Parser
       RPN
