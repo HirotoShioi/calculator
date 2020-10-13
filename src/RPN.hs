@@ -33,7 +33,7 @@ data EvaluationError
 renderRPNError :: RPN.EvaluationError -> String
 renderRPNError = \case
     DivideByZero -> "Divided by zero"
-    NegativeExponent n -> "Power is negative: " <> show n
+    NegativeExponent n -> "Negative exponent" <> show n
     EmptyStack -> "Stack is empty"
     SecondNumMissing ls -> "Second number could not be obtained: " <> show ls
     TooManyOnStack ls -> "More than two number on stack: " <> show ls
