@@ -28,6 +28,8 @@ expressionParserSpec = do
         prop "The length of the token should be valid"
             (\(ExpressionStringGenerator expr num) ->
                 fmap length (P.parseString expr) === Right num)
+        it "Can parse negative numbers" $
+            (P.parseString "4 * -1") `shouldBe` (Right [P.Num 4, P.Multiply, P.Num (-1)])
 
 data ExpressionStringGenerator = ExpressionStringGenerator String Int
   deriving Show
@@ -41,7 +43,7 @@ instance Arbitrary ExpressionStringGenerator where
         where
         -- Only positive numbers
         genPositiveNumStr :: Gen String
-        genPositiveNumStr = show <$> (arbitrary :: Gen Int)
+        genPositiveNumStr = show <$> (choose (1, 100) :: Gen Int)
         genOperator :: Gen String
         genOperator = return <$> elements "+-/*^()"
 
