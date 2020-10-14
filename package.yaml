@@ -26,6 +26,8 @@ dependencies:
 - QuickCheck
 - hspec
 - containers
+- optparse-applicative
+- text
 
 ghc-options:
   - -Werror
