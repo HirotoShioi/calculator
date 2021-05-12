@@ -1,6 +1,9 @@
-module CLI where
+module CLI
+  ( opts
+  , Input(..)
+  ) where
 
-import           Data.Text
+import           Data.Text           (Text)
 import           Options.Applicative (Parser, ParserInfo, fullDesc, header,
                                       help, helper, info, long, metavar,
                                       progDesc, short, strArgument, strOption,

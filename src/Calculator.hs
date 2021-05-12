@@ -24,7 +24,7 @@ calculate input = do
     rpn <-  errorToString renderShuntingYardError $ intoRPN parsedData
     errorToString RPN.renderRPNError $ RPN.evaluate rpn
 
-errorToString :: (Show a) => (a -> String) -> Either a b -> Either String b
+errorToString :: (a -> String) -> Either a b -> Either String b
 errorToString showFunc (Left e)     = (Left . showFunc) e
 errorToString _showFunc (Right res) = Right res
 
